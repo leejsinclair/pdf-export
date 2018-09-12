@@ -5,6 +5,7 @@ const timeout = async (mis: number) => new Promise(resolve => setTimeout(resolve
 
 interface IPDFExportOptions extends CDP.ICDPOptions {
   chromeBin: string,
+  chromBinOptions: Array<string>,
   timeout?: number,
 };
 
@@ -19,11 +20,13 @@ export default class PDFExport {
   private async spawnChrome(): Promise<ChildProcess> {
     if (PDFExport._chromeProcessPromise === null) {
       PDFExport._chromeProcessPromise = new Promise(async resolve => {
-        const p = spawn(this.options.chromeBin, [
+        const chromeBinOptions = this.options.chromBinOptions || [];
+        let options = [
           `--remote-debugging-port=${this.options.port}`,
           '--disable-extensions',
-          '--headless',
-        ]);
+          '--headless',...chromeBinOptions
+        ];
+        const p = spawn(this.options.chromeBin, options);
         p.stdout.pipe(process.stdout);
         p.stderr.pipe(process.stderr);
         let started = false;

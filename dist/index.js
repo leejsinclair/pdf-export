@@ -13,11 +13,13 @@ class PDFExport {
     async spawnChrome() {
         if (PDFExport._chromeProcessPromise === null) {
             PDFExport._chromeProcessPromise = new Promise(async (resolve) => {
-                const p = child_process_1.spawn(this.options.chromeBin, [
+                const chromeBinOptions = this.options.chromBinOptions || [];
+                let options = [
                     `--remote-debugging-port=${this.options.port}`,
                     '--disable-extensions',
-                    '--headless',
-                ]);
+                    '--headless', ...chromeBinOptions
+                ];
+                const p = child_process_1.spawn(this.options.chromeBin, options);
                 p.stdout.pipe(process.stdout);
                 p.stderr.pipe(process.stderr);
                 let started = false;

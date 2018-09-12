@@ -4,6 +4,7 @@ const exporter = new PDFExportor({
   host: 'localhost',
   port: 9333,
   chromeBin: '/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary',
+  chromeBinOptions: [ '--no-sandbox' ],
   timeout: 5000,
 });
 
